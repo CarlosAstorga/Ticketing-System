@@ -1,0 +1,47 @@
+body {
+    min-height: 100vh;
+    background-color: #12181b;
+}
+
+i {
+    font-size: 1.3rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.sidenav {
+    min-height: 100vh;
+    width: 70px;
+    display: flex;
+    flex-direction: column;
+    background: #2a2e35;
+    box-shadow: 4px 0 10px -3px #010101;
+}
+
+.sidenav .item {
+    margin-bottom: 10px;
+}
+
+a.item {
+    color: #6c7983;
+}
+
+.item {
+    width: 100%;
+    max-width: 70px;
+    height: 4em;
+    max-height: 70px;
+    background: #2a2e35;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.5s;
+}
+
+.item:hover {
+    color: #fa8142;
+}
