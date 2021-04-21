@@ -46,7 +46,7 @@
         </form>
 
         <footer class="stripe">
-            <p class="text">¿Ya eres usuario? <a class="anchor" href="{{ route('login') }}">Inicia sesión</a></p>
+            <p class="text">¿Ya eres usuario? <a href="{{ route('login') }}">Inicia sesión</a></p>
         </footer>
     </main>
 </body>
