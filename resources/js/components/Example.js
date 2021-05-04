@@ -31,7 +31,49 @@ const users = [
         name: "role",
         title: "Rol"
     }
-]
+];
+
+const projects = [
+    {
+        name: "name",
+        title: "Nombre"
+    },
+    {
+        name: "description",
+        title: "Descripción"
+    }
+];
+
+const tickets = [
+    {
+        name: "title",
+        title: "Asunto"
+    },
+    {
+        name: "project.name",
+        title: "Proyecto"
+    },
+    {
+        name: "developer.name",
+        title: "Encargado"
+    },
+    {
+        name: "priority.title",
+        title: "Prioridad"
+    },
+    {
+        name: "status.title",
+        title: "Estatus"
+    },
+    {
+        name: "category.title",
+        title: "Categoria"
+    },
+    {
+        name: "created_at",
+        title: "Creado el dia"
+    }
+];
 
 export default function Example({ sourceColumns, buttons, url }) {
     const [records, setData] = useState([]);
@@ -77,7 +119,6 @@ export default function Example({ sourceColumns, buttons, url }) {
             ? axios(`${url}/list`, { params: { filter: filter } })
             : axios(`${url}/list`);
         axiosInstance.then(response => {
-            console.log({response});
             setPagination(response.data);
             setData(response.data.data);
             setLoading(false);
@@ -114,7 +155,7 @@ export default function Example({ sourceColumns, buttons, url }) {
                         }
                         {
                             buttons.length > 0 && (
-                                <th style={{ width: 5 + "%" }}>Acciones</th>
+                                <th className="w-5">Acciones</th>
                             )}
                         </tr>
                             
@@ -125,6 +166,7 @@ export default function Example({ sourceColumns, buttons, url }) {
                                 return (
                                     <tr
                                         key={row.id}
+                                        className="text-nowrap"
                                     >
                                         {sourceColumns.map(column => {
                                             return (
@@ -161,7 +203,7 @@ export default function Example({ sourceColumns, buttons, url }) {
                         ) : (
                             <tr>
                                 <td
-                                    style={{ textAlign: "center" }}
+                                    className="text-center"
                                     colSpan={sourceColumns.length + 1}
                                 >
                                     {loading ? (
@@ -184,7 +226,55 @@ if (document.getElementById('testing')) {
     let buttons = [{ cb: handleEdit, icon: "fas fa-user-tag"}, { cb: handleDelete, icon: "far fa-trash-alt text-danger"}];
     ReactDOM.render(
         <Example sourceColumns={users} buttons={buttons}
-        url={'admin/users'}/>,
+        url={'users'}/>,
+        container
+    );
+}
+
+if (document.getElementById('project-list')) {
+    const container = document.getElementById("project-list");
+    let buttons = [
+        {
+            cb: handleView,
+            icon: "fas fa-eye"
+        },
+        {
+            cb: handleEdit,
+            icon: "fas fa-edit"
+        },
+        {
+            cb: handleDelete,
+            icon: "fas fa-trash"
+        }
+    ];
+
+    ReactDOM.render(
+        <Example sourceColumns={projects
+        } buttons={buttons}
+        url={'projects'}/>,
+        container
+    );
+}
+
+if (document.getElementById('ticket-list')) {
+    const container = document.getElementById("ticket-list");
+    let buttons = [
+        {
+            cb: handleView,
+            icon: "fas fa-eye"
+        },
+        {
+            cb: handleEdit,
+            icon: "fas fa-edit"
+        },
+        {
+            cb: handleDelete,
+            icon: "fas fa-trash"
+        }
+    ];
+    ReactDOM.render(
+        <Example sourceColumns={tickets} buttons={buttons}
+        url={'tickets'}/>,
         container
     );
 }
@@ -199,7 +289,6 @@ function handleView(url, id) {
 }
 
 function handleDelete(url, id) {
-    console.log('url', url);
     if (confirm("Eliminar registro?")) {
         axios({
             method: "delete",
@@ -207,7 +296,15 @@ function handleDelete(url, id) {
             data: {
                 id
             }
-        })
-            .then((window.location = `${url}`))
+        });
     }
+}
+
+if (document.getElementById('sidebarLinks')) {
+    // const sideBar = document.getElementById('sidebarLinks');
+    // const links = sideBar.children;
+
+    // for (let item of links) {
+    //     if (window.location == item.firstElementChild.href) item.firstElementChild.classList.add('active');
+    // }
 }

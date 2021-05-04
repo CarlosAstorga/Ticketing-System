@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Role;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        $roles = Role::with('permissions')->get();
+
+        foreach ($roles as $role) {
+            foreach ($role->permissions as $permissions) {
+                $permissionsArray[$permissions->title][] = $role->id;
+            }
+        }
+
+        foreach ($permissionsArray as $title => $roles) {
+            Gate::define($title, function (\App\Models\User $user) use ($roles) {
+                return count(array_intersect($user->roles->pluck('id')->toArray(), $roles)) > 0;
+            });
+        }
     }
 }
