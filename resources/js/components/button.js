@@ -1,12 +1,17 @@
 import React from "react";
 
-export default function Button({ id, icon, cb, url }) {
+export default function Button({ id, fn, tableUrl, filter, button }) {
+    const { icon, cb, url, condition=(id)=> {return id} } = button;
     return (
-        <a
-            className="flex-fill btn btn-light border-0 lh-lg"
-            onClick={() => cb(url, id)}
-        >
-            <i className={icon}></i>
-        </a>
+        <>
+            {condition(id) && (
+                <a
+                    className="flex-fill btn btn-light border-0 lh-lg"
+                    onClick={() => cb(url, id, fn, filter, tableUrl)}
+                >
+                    <i className={icon}></i>
+                </a>
+            )}
+        </>
     );
 }

@@ -1,0 +1,6 @@
+@extends('templates.main')
+@section('header', 'Roles')
+@section('buttons', '')
+@section('route', route('roles.create'))
+@section('link', 'Nuevo')
+@section('component', 'roles')

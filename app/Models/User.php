@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $appends = ['role'];
+    protected $with = ['roles'];
 
     /**
      * The attributes that are mass assignable.

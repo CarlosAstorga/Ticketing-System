@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $roles = Role::with('permissions')->get();
+        $roles = Role::get();
 
         foreach ($roles as $role) {
             foreach ($role->permissions as $permissions) {

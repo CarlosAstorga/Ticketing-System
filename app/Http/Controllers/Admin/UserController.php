@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -16,6 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        abort_unless(Gate::allows('user_access'), 403, 'Acción no autorizada');
         return view('users.index', ['module' => 'users']);
     }
 
@@ -26,7 +28,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        abort_unless(Gate::allows('user_create'), 403, 'Acción no autorizada');
+        return view('users.form', [
+            'module'    => 'users',
+            'user'      => new User(),
+            'roles'     => Role::get()
+        ]);
     }
 
     /**
@@ -37,7 +44,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort_unless(Gate::allows('user_create'), 403, 'Acción no autorizada');
+        $user = User::create($request->validate([
+            'name'      => 'required|max:100',
+            'email'     => 'required|unique:App\Models\User,email'
+        ]));
+        $user->roles()->sync($request->roles);
+        return redirect('admin/users');
     }
 
     /**
@@ -57,9 +70,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        abort_unless(Gate::allows('user_edit'), 403, 'Acción no autorizada');
+        return view('users.form', [
+            'module'    => 'users',
+            'user'      => $user,
+            'roles'     => Role::get()
+        ]);
     }
 
     /**
@@ -69,9 +87,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        abort_unless(Gate::allows('user_edit'), 403, 'Acción no autorizada');
+        $user->update($request->validate([
+            'name'      => 'required|max:100',
+            'email'     => 'required|'
+        ]));
+        $user->roles()->sync($request->roles);
+        return redirect('admin/users');
     }
 
     /**
@@ -80,14 +104,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        abort_unless(Gate::allows('user_delete'), 403, 'Acción no autorizada');
+        $user->roles()->detach();
+        $user->assignedTickets()->update(['developer_id' => null]);
+        $user->submittedTickets()->update(['submitter_id' => null]);
+        $user->delete();
     }
 
     public function list(Request $request)
     {
-        $filter = $request->input('filter') ?? null;
+        $filter = $request->input('filter', null);
 
         $users = User::query();
         $users = $filter ?
@@ -99,8 +127,8 @@ class UserController extends Controller
                     });
             }) : $users;
 
-        $paginator = $users->paginate(10)->toJson();
-
+        $users = $users->orderBy('id', 'DESC');
+        $paginator = $users->paginate(10);
         return $paginator;
     }
 }

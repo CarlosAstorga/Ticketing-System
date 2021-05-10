@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ProjectController;
@@ -22,12 +23,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users/list', [UserController::class, 'list']);
-        Route::resource('/users', UserController::class);
+        Route::resource('users', UserController::class);
     });
+
+    Route::get('/roles/list', [RoleController::class, 'list']);
+    Route::resource('roles', RoleController::class);
 
     Route::get('tickets/list', [TicketController::class, 'list'])->name('tickets.');
     Route::resource('tickets', TicketController::class);
 
     Route::get('projects/list', [ProjectController::class, 'list'])->name('projects.');
+    Route::get('projects/{project}/tickets', [TicketController::class, 'ticketsByProject'])->name('projects.');
     Route::resource('projects', ProjectController::class);
 });

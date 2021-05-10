@@ -4,20 +4,31 @@ import ReactDOM from "react-dom";
 import SearchBar from "./searchBar";
 import Paginator from "./paginator";
 import Button from "./button";
+import Table from "./Table";
+import { isArray, isUndefined } from "lodash";
 
-function Avatar({ avatar }) {
+function Avatar(img) {
     return (
-        <img src={/images/ + avatar} className="avatar"></img>
+        <img src={/images/ + img} className="rounded-circle" width="28" height="28"></img>
     );
 }
 
+function Pills(array, column) {
+    const { cClass = "bg-danger" } = column;
+    return array.map(row => {
+        return (
+            <span key={row.id} className={`badge ${cClass} me-1`}>{row.title}</span>
+        )
+    });
+}
 
 const users = [
     {
         name: "avatar",
         title: "Avatar",
         hClass: "w-1",
-        data: Avatar
+        data: Avatar,
+        field: 'profile_picture'
     },
     {
         name: "name",
@@ -29,14 +40,17 @@ const users = [
     },
     {
         name: "role",
-        title: "Rol"
+        title: "Roles",
+        data: Pills,
+        field: "roles",
+        cClass: "bg-danger"
     }
 ];
 
 const projects = [
     {
-        name: "name",
-        title: "Nombre"
+        name: "title",
+        title: "Título"
     },
     {
         name: "description",
@@ -50,12 +64,16 @@ const tickets = [
         title: "Asunto"
     },
     {
-        name: "project.name",
+        name: "project.title",
         title: "Proyecto"
     },
     {
+        name: "description",
+        title: "Descripción"
+    },
+    {
         name: "developer.name",
-        title: "Encargado"
+        title: "Resolverá"
     },
     {
         name: "priority.title",
@@ -72,38 +90,47 @@ const tickets = [
     {
         name: "created_at",
         title: "Creado el dia"
+    },
+    {
+        name: "due_date",
+        title: "Fecha requerido"
+    }
+];
+
+const roles = [
+    {
+        name: "title",
+        title: 'Título'
+    },
+    {
+        name: "permissions",
+        title:  "Permisos",
+        data: Pills,
+        field: 'permissions',
+        bClass: 'text-wrap'
     }
 ];
 
 export default function Example({ sourceColumns, buttons, url }) {
-    const [records, setData] = useState([]);
-    const [pagination, setPagination] = useState("");
-    const [filter, setFilter] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [tableData, setTableData] = useState({});
+    const [filter, setFilter] = useState('');
+    const [currentPage, setCurrentPage] = useState('1');
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        search(filter);
-    }, [search]);
+        search(url, filter);
+    }, [filter]);
 
-    /**
-     * Obtiene los registros correspondientes a la pagina solicitada.
-     * @param {String} url
-     */
-    function page(url) {
-        setLoading(true);
-        axios(url).then(response => {
-            setPagination(response.data);
-            setData(response.data.data);
-            setLoading(false);
-        });
-    }
+    useEffect(() => {
+        if (!isUndefined(tableData.links)) getData(tableData.links[currentPage].url, filter);
+    }, [currentPage]);
 
     /**
      * Funcion debounce para las busquedas del usuario.
      */
     const search = useCallback(
-        _.debounce(function(text) {
-            getData(text);
+        _.debounce(function(url, filter) {
+            getData(url, filter);
         }, 1000),
         []
     );
@@ -112,15 +139,13 @@ export default function Example({ sourceColumns, buttons, url }) {
      * Obtiene todos los registros paginados.
      * @param {String} filter
      */
-    function getData(filter = null) {
-        setFilter(filter);
+    function getData(pageUrl, filter) {
         setLoading(true);
         const axiosInstance = filter
-            ? axios(`${url}/list`, { params: { filter: filter } })
-            : axios(`${url}/list`);
+            ? axios(pageUrl, { params: { filter: filter } })
+            : axios(pageUrl);
         axiosInstance.then(response => {
-            setPagination(response.data);
-            setData(response.data.data);
+            setTableData(response.data);
             setLoading(false);
         });
     }
@@ -128,153 +153,81 @@ export default function Example({ sourceColumns, buttons, url }) {
     return (
         <>
             <div className="row justify-content-between">
-                <div className="col-lg-6">
-                    <Paginator config={pagination} handlePagination={page} />
+                <div className="col mb-3 table-responsive z-index">
+                    <Paginator currentPage={currentPage} handlePagination={setCurrentPage} config={tableData} />
                 </div>
-                <div className="col-lg-6 mb-3">
+                <div className="col-md-6 col-lg-4 col-xl-3 align-self-end mb-3">
                     <SearchBar
-                        handleFilter={search}
                         id="search"
+                        handleFilter={setFilter}
                     />
                 </div>
             </div>
-            <div
-                className="table-responsive"
-            >
-                <table className="table table-striped">
-                    <thead className="table-dark">
-                        <tr>
-                        {   
-                            sourceColumns.map(column => {
-                                return (
-                                    <th className={column.hClass}
-                                    key={column.title}>{column.title}</th>
-                                );
-                            })
-                            
-                        }
-                        {
-                            buttons.length > 0 && (
-                                <th className="w-5">Acciones</th>
-                            )}
-                        </tr>
-                            
-                    </thead>
-                    <tbody>
-                    {records.length > 0 ? (
-                            records.map(row => {
-                                return (
-                                    <tr
-                                        key={row.id}
-                                        className="text-nowrap"
-                                    >
-                                        {sourceColumns.map(column => {
-                                            return (
-                                                <td key={column.name}>
-                                                    {column.data ? (
-                                                        column.data(row)
-                                                    ) : (
-                                                        _.get(
-                                                            row,
-                                                            column.name
-                                                        )
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                        {buttons.length > 0 && (
-                                            <td className="p-0 d-flex">
-                                                {buttons.map(button => {
-                                                    return (
-                                                        <Button
-                                                            key={button.icon}
-                                                            id={row.id}
-                                                            icon={button.icon}
-                                                            cb={button.cb}
-                                                            url={url}
-                                                        />
-                                                    );
-                                                })}
-                                            </td>
-                                        )}
-                                    </tr>
-                                );
-                            })
-                        ) : (
-                            <tr>
-                                <td
-                                    className="text-center"
-                                    colSpan={sourceColumns.length + 1}
-                                >
-                                    {loading ? (
-                                        <i>Cargando registros...</i>
-                                    ) : (
-                                        <i>No se encontraron registros</i>
-                                    )}
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+            <Table data={tableData} columns={sourceColumns} loading={loading} buttons={buttons} url={url} fn={getData} filter={filter} />
         </>
     );
 }
 
-if (document.getElementById('testing')) {
-    const container = document.getElementById("testing");
-    let buttons = [{ cb: handleEdit, icon: "fas fa-user-tag"}, { cb: handleDelete, icon: "far fa-trash-alt text-danger"}];
+if (document.getElementById('users')) {
+    const container = document.getElementById("users");
+    let buttons = [{ cb: handleEdit, icon: "fas fa-user-tag", url: "users"}, { cb: handleDelete, icon: "fas fa-trash text-danger", url: "users"}];
     ReactDOM.render(
         <Example sourceColumns={users} buttons={buttons}
-        url={'users'}/>,
+        url={'/admin/users/list'}/>,
         container
     );
 }
 
-if (document.getElementById('project-list')) {
-    const container = document.getElementById("project-list");
+if (document.getElementById('projects')) {
+    const container = document.getElementById("projects");
     let buttons = [
         {
             cb: handleView,
-            icon: "fas fa-eye"
+            icon: "fas fa-eye",
+            url: "projects"
         },
         {
             cb: handleEdit,
-            icon: "fas fa-edit"
+            icon: "fas fa-edit",
+            url: "projects"
         },
         {
             cb: handleDelete,
-            icon: "fas fa-trash"
+            icon: "fas fa-trash text-danger",
+            url: "projects"
         }
     ];
 
     ReactDOM.render(
         <Example sourceColumns={projects
         } buttons={buttons}
-        url={'projects'}/>,
+        url={'/projects/list'}/>,
         container
     );
 }
 
-if (document.getElementById('ticket-list')) {
-    const container = document.getElementById("ticket-list");
+if (document.getElementById('tickets')) {
+    const container = document.getElementById("tickets");
     let buttons = [
         {
             cb: handleView,
-            icon: "fas fa-eye"
+            icon: "fas fa-eye",
+            url: "tickets"
         },
         {
             cb: handleEdit,
-            icon: "fas fa-edit"
+            icon: "fas fa-edit",
+            url: "tickets"
         },
         {
             cb: handleDelete,
-            icon: "fas fa-trash"
+            icon: "fas fa-trash text-danger",
+            url: "tickets"
         }
     ];
     ReactDOM.render(
         <Example sourceColumns={tickets} buttons={buttons}
-        url={'tickets'}/>,
+        url={'/tickets/list'}/>,
         container
     );
 }
@@ -288,7 +241,7 @@ function handleView(url, id) {
     window.location = `${url}/${id}`;
 }
 
-function handleDelete(url, id) {
+function handleDelete(url, id, fn, filter, tableUrl) {
     if (confirm("Eliminar registro?")) {
         axios({
             method: "delete",
@@ -296,15 +249,46 @@ function handleDelete(url, id) {
             data: {
                 id
             }
-        });
+        }).then(fn(tableUrl, filter));
     }
 }
 
-if (document.getElementById('sidebarLinks')) {
-    // const sideBar = document.getElementById('sidebarLinks');
-    // const links = sideBar.children;
+if (document.getElementById('roles')) {
+    const container = document.getElementById("roles");
+    let buttons = [
+        {
+            cb: handleView,
+            icon: "fas fa-edit",
+            url: "roles",
+            condition: (id) => {return id != 1}
+        },
+        {
+            cb: handleDelete,
+            icon: "fas fa-trash text-danger",
+            url: "roles",
+            condition: (id) => { return id != 1}
+        }
+    ];
+    ReactDOM.render(
+        <Example sourceColumns={roles} buttons={buttons}
+        url={'/roles/list'}/>,
+        container
+    );
+}
 
-    // for (let item of links) {
-    //     if (window.location == item.firstElementChild.href) item.firstElementChild.classList.add('active');
-    // }
+if (document.getElementById('project-tickets')) {
+    const container = document.getElementById("project-tickets");
+    let buttons = [
+        {
+            cb: handleView,
+            icon: "fas fa-eye",
+            url: "/tickets"
+        }
+    ];
+    tickets.splice(1,1);
+    ReactDOM.render(
+        <Example sourceColumns={tickets} buttons={buttons}
+        url={`${window.location.pathname}/tickets`}/>,
+        container
+    );
 }

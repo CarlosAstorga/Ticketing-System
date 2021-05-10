@@ -14,24 +14,28 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        Permission::create(['title' => 'user_management_access']);
-        Permission::create(['title' => 'user_create']);
-        Permission::create(['title' => 'user_edit']);
-        Permission::create(['title' => 'user_show']);
-        Permission::create(['title' => 'user_delete']);
-        Permission::create(['title' => 'user_access']);
-        Permission::create(['title' => 'user_assigment']);
-        Permission::create(['title' => 'project_create']);
-        Permission::create(['title' => 'project_edit']);
-        Permission::create(['title' => 'project_show']);
-        Permission::create(['title' => 'project_delete']);
-        Permission::create(['title' => 'project_access']);
-        Permission::create(['title' => 'ticket_create']);
-        Permission::create(['title' => 'ticket_edit']);
-        Permission::create(['title' => 'ticket_show']);
-        Permission::create(['title' => 'ticket_delete']);
-        Permission::create(['title' => 'ticket_access']);
-        Permission::create(['title' => 'ticket_close']);
-        Permission::create(['title' => 'ticket_resolve']);
+        Permission::create(['title' => 'user_create', 'module_id' => 2]);
+        Permission::create(['title' => 'user_edit', 'module_id' => 2]);
+        Permission::create(['title' => 'user_show', 'module_id' => 2]);
+        Permission::create(['title' => 'user_delete', 'module_id' => 2]);
+        Permission::create(['title' => 'user_access', 'module_id' => 2]);
+        Permission::create(['title' => 'user_assigment', 'module_id' => 2]);
+        Permission::create(['title' => 'role_create', 'module_id' => 3]);
+        Permission::create(['title' => 'role_edit', 'module_id' => 3]);
+        Permission::create(['title' => 'role_show', 'module_id' => 3]);
+        Permission::create(['title' => 'role_delete', 'module_id' => 3]);
+        Permission::create(['title' => 'role_access', 'module_id' => 3]);
+        Permission::create(['title' => 'project_create', 'module_id' => 4]);
+        Permission::create(['title' => 'project_edit', 'module_id' => 4]);
+        Permission::create(['title' => 'project_show', 'module_id' => 4]);
+        Permission::create(['title' => 'project_delete', 'module_id' => 4]);
+        Permission::create(['title' => 'project_access', 'module_id' => 4]);
+        Permission::create(['title' => 'ticket_create', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_edit', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_show', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_delete', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_access', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_close', 'module_id' => 5]);
+        Permission::create(['title' => 'ticket_resolve', 'module_id' => 5]);
     }
 }

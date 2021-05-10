@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
-
+    protected $appends = ['row_class'];
     protected $with = [
         'submitter',
         'priority',
@@ -27,6 +27,9 @@ class Ticket extends Model
         'project_id',
         'developer_id',
         'due_date'
+    ];
+    protected $casts = [
+        'due_date' => 'date:d/m/Y'
     ];
 
     public function submitter()
@@ -77,6 +80,31 @@ class Ticket extends Model
 
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format('d/m/Y g:i:s');
+        return $date->format('d/m/Y');
+    }
+
+    public function getRowClassAttribute()
+    {
+        if ($this->status_id == 4)                              return 'table-primary text-primary';
+        if ($this->priority_id == 3 && $this->status_id != 4)   return 'table-danger text-danger';
+    }
+
+    public function scopeFiltered($query, $filter)
+    {
+        return $query->where(function ($ticket) use ($filter) {
+            $ticket->where('title', 'LIKE', '%' . $filter . '%')
+                ->orWhere('created_at', 'LIKE', '%' . $filter . '%')
+                ->orWhereHas('priority', function ($relation) use ($filter) {
+                    $relation->where('title', 'LIKE', '%' . $filter . '%');
+                })->orWhereHas('status', function ($relation) use ($filter) {
+                    $relation->where('title', 'LIKE', '%' . $filter . '%');
+                })->orWhereHas('category', function ($relation) use ($filter) {
+                    $relation->where('title', 'LIKE', '%' . $filter . '%');
+                })->orWhereHas('project', function ($relation) use ($filter) {
+                    $relation->where('title', 'LIKE', '%' . $filter . '%');
+                })->orWhereHas('developer', function ($relation) use ($filter) {
+                    $relation->where('name', 'LIKE', '%' . $filter . '%');
+                });
+        });
     }
 }

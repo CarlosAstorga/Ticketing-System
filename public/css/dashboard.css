@@ -30,6 +30,18 @@ body {
     color: #fa8142;
 }
 
+.icon {
+    width: 1.4rem;
+}
+
+.table-list {
+    max-height: 541px;
+}
+
+.z-index {
+    z-index: 1;
+    position: relative;
+}
 /*
  * Navbar
  */

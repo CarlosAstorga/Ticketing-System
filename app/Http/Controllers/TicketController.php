@@ -21,7 +21,7 @@ class TicketController extends Controller
     public function index()
     {
         abort_unless(Gate::allows('ticket_access'), 403, 'Acción no autorizada');
-        return view('tickets.index', ['module' => 'ticket']);
+        return view('tickets.index', ['module' => 'tickets']);
     }
 
     /**
@@ -33,7 +33,7 @@ class TicketController extends Controller
     {
         abort_unless(Gate::allows('ticket_create'), 403, 'Acción no autorizada');
         return view('tickets.form', [
-            'module'    => 'ticket',
+            'module'    => 'tickets',
             'ticket'    => new Ticket(),
             'catalogs'  => $this->catalogs()
         ]);
@@ -73,7 +73,7 @@ class TicketController extends Controller
     {
         abort_unless(Gate::allows('ticket_edit'), 403, 'Acción no autorizada');
         return view('tickets.form', [
-            'module'    => 'ticket',
+            'module'    => 'tickets',
             'ticket'    => $ticket,
             'catalogs'  => $this->catalogs()
         ]);
@@ -103,40 +103,31 @@ class TicketController extends Controller
     {
         abort_unless(Gate::allows('ticket_delete'), 403, 'Acción no autorizada');
         $ticket->delete();
-        return redirect('tickets');
     }
 
     public function list(Request $request)
     {
-        $filter = $request->input('filter') ?? null;
+        $filter = $request->input('filter', null);
         $tickets = Ticket::query();
 
-        if (Gate::denies('user_assigmenttt')) {
+        if (Gate::denies('user_assigment')) {
             $tickets = Ticket::where(function ($query) use ($request) {
                 $query->where('submitter_id', $request->user()->id)
                     ->orWhere('developer_id', $request->user()->id);
             });
         }
 
-        $tickets = $filter ?
-            $tickets->where(function ($query) use ($filter) {
-                $query->where('title', 'LIKE', '%' . $filter . '%')
-                    ->orWhere('created_at', 'LIKE', '%' . $filter . '%')
-                    ->orWhereHas('priority', function ($relation) use ($filter) {
-                        $relation->where('title', 'LIKE', '%' . $filter . '%');
-                    })->orWhereHas('status', function ($relation) use ($filter) {
-                        $relation->where('title', 'LIKE', '%' . $filter . '%');
-                    })->orWhereHas('category', function ($relation) use ($filter) {
-                        $relation->where('title', 'LIKE', '%' . $filter . '%');
-                    })->orWhereHas('project', function ($relation) use ($filter) {
-                        $relation->where('title', 'LIKE', '%' . $filter . '%');
-                    })->orWhereHas('developer', function ($relation) use ($filter) {
-                        $relation->where('name', 'LIKE', '%' . $filter . '%');
-                    });
-            }) : $tickets;
-
-        $tickets = $tickets->orderBy('id', 'DESC');
+        $tickets->filtered($filter)->orderBy('id', 'DESC');
         $paginator = $tickets->paginate(10)->toJson();
+        return $paginator;
+    }
+
+    public function ticketsByProject(Request $request)
+    {
+        $project    = explode('/', $request->path())[1];
+        $filter     = $request->input('filter', null);
+        $tickets    = Ticket::where('project_id', $project)->filtered($filter)->orderBy('id', 'DESC');
+        $paginator  = $tickets->paginate(10);
         return $paginator;
     }
 
@@ -167,7 +158,8 @@ class TicketController extends Controller
             'description'    => 'required|max:150',
             'category_id'    => 'required|exists:App\Models\Category,id'
         ];
-        $request->due_date ? $rules['due_date'] = 'date_format:Y-m-d|after:yesterday' : null;
+        $request->due_date      ? $rules['due_date']    = 'date_format:Y-m-d|after:yesterday'       : null;
+        $request->project_id    ? $rules['project_id']  = 'exists:App\Models\Project,id'            : null;
 
         if (Gate::allows('user_assigment')) {
             $rules['developer_id']  = 'required|exists:App\Models\User,id';
@@ -175,7 +167,7 @@ class TicketController extends Controller
         }
 
         if (Gate::allows('ticket_close') || Gate::allows('ticket_resolve')) {
-            $rules['status_id'] = 'required|exists:App\Models\Status,id';
+            $rules['status_id']     = 'required|exists:App\Models\Status,id';
         }
 
         $validatedData = $request->validate($rules);
