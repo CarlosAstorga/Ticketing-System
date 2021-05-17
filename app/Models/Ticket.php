@@ -15,7 +15,8 @@ class Ticket extends Model
         'status',
         'category',
         'developer',
-        'project'
+        'project',
+        'files'
     ];
     protected $fillable = [
         'title',
@@ -68,10 +69,10 @@ class Ticket extends Model
             ->select('id', 'title');
     }
 
-    // public function files()
-    // {
-    //     return $this->hasMany('App\Models\File', 'ticket_id', 'id');
-    // }
+    public function files()
+    {
+        return $this->hasMany('App\Models\File', 'ticket_id', 'id');
+    }
 
     // public function comments()
     // {

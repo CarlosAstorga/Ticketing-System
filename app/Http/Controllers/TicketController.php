@@ -61,6 +61,10 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         abort_unless(Gate::allows('ticket_show'), 403, 'Acción no autorizada');
+        return view('tickets.ticket', [
+            'module'    => 'tickets',
+            'ticket'    => $ticket
+        ]);
     }
 
     /**
