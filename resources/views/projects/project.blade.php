@@ -1,16 +1,29 @@
 @extends('templates.main')
 @section('header', 'Proyecto #' . $project->id)
-@section('buttons', '')
-@section('button', '')
-@section('contentHeader')
-<div class="row align-items-center mt-5 pt-5">
-    <p class="col-sm-2 text-md-end form-label fw-bold mb-sm-1 mb-md-0">Título</p>
-    <p class="col-sm-10 mb-sm-1 mb-md-0">{{ $project->title }}</p>
+@section('buttons')
+<div class="btn-group">
+    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ route('projects.index') }}"><i class="fas fa-th-list"></i></a>
 </div>
-<div class="row align-items-center mb-5 pb-5">
-    <p class="col-sm-2 text-md-end form-label fw-bold mb-sm-1 mb-md-0">Descripción</p>
-    <p class="col-sm-10 mb-sm-1 mb-md-0">{{ $project->description }}</p>
-</div>
-<h2 class="mb-3">Tickets relacionados</h2>
 @endsection
-@section('component', 'project-tickets')
+@section('button', '')
+@section('content')
+<div class="card">
+    <div class="card-header">Datos generales</div>
+    <div class="card-body my-3 my-sm-5">
+        <div class="row mb-2">
+            <p class="col-12 col-sm-4 text-sm-end mb-0 fw-bold">Título</p>
+            <p class="col-12 col-sm-8 mb-0">{{ $project->title }}</p>
+        </div>
+        <div class="row mb-2">
+            <p class="col-12 col-sm-4 text-sm-end mb-0 fw-bold">Descripción</p>
+            <p class="col-12 col-sm-8 mb-0">{{ $project->description }}</p>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">Tickets</div>
+    <div class="card-body">
+        <div id="project-tickets"></div>
+    </div>
+</div>
+@endsection

@@ -38,4 +38,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('projects', ProjectController::class);
 
     Route::post('/tickets/{ticket}/upload', [FileController::class, 'upload']);
+    Route::get('/files/{file}/download', [FileController::class, 'download']);
+    Route::delete('/files/{file}', [FileController::class, 'destroy']);
 });

@@ -8,11 +8,13 @@ use App\Models\Status;
 use App\Models\Project;
 use App\Models\Priority;
 use App\Models\Category;
+use App\Traits\FileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class TicketController extends Controller
 {
+    use FileTrait;
     /**
      * Display a listing of the resource.
      *
@@ -106,6 +108,10 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         abort_unless(Gate::allows('ticket_delete'), 403, 'Acción no autorizada');
+        if ($ticket->files()->count()) {
+            $ticket->files()->delete();
+            $this->deleteDirectory('public/images/tickets/' . $ticket->id);
+        }
         $ticket->delete();
     }
 
