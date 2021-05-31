@@ -43,7 +43,7 @@ const users = [
         title: "Roles",
         data: Pills,
         field: "roles",
-        cClass: "bg-danger"
+        cClass: "bg-orange"
     }
 ];
 
@@ -107,6 +107,7 @@ const roles = [
         title:  "Permisos",
         data: Pills,
         field: 'permissions',
+        cClass: 'bg-orange',
         bClass: 'text-wrap'
     }
 ];
@@ -170,7 +171,7 @@ export default function Example({ sourceColumns, buttons, url }) {
 
 if (document.getElementById('users')) {
     const container = document.getElementById("users");
-    let buttons = [{ cb: handleEdit, icon: "fas fa-user-tag", url: "users"}, { cb: handleDelete, icon: "fas fa-trash text-danger", url: "users"}];
+    let buttons = [{ cb: handleEdit, icon: "fas fa-edit", url: "users"}, { cb: handleDelete, icon: "fas fa-trash text-danger", url: "users"}];
     ReactDOM.render(
         <Example sourceColumns={users} buttons={buttons}
         url={'/admin/users/list'}/>,
@@ -257,7 +258,7 @@ if (document.getElementById('roles')) {
     const container = document.getElementById("roles");
     let buttons = [
         {
-            cb: handleView,
+            cb: handleEdit,
             icon: "fas fa-edit",
             url: "roles",
             condition: (id) => {return id != 1}

@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.3",
-        "@popperjs/core": "^2.9.2"
+        "@popperjs/core": "^2.9.2",
+        "chart.js": "^3.3.0"
     }
 }

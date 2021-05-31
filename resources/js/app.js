@@ -13,3 +13,5 @@ require('./bootstrap');
  */
 
 require('./components/Example');
+
+require('../../node_modules/chart.js/dist/chart.min.js');

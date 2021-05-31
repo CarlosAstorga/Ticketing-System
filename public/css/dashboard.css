@@ -58,3 +58,61 @@ body {
     top: 0.25rem;
     right: 1rem;
 }
+
+/*
+* Dasahboard
+*/
+.dash-card-icon {
+    opacity: 75%;   
+    font-size: 3rem;
+    transform: rotate(45deg);
+}
+
+/*
+* Profile
+*/
+.avatar {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+}
+
+.avatar-profile-container {
+    height: 13rem;
+    width: 100%;
+}
+
+.filter-shadow {
+    cursor: pointer;
+}
+
+.filter-shadow:hover {
+    filter: drop-shadow(2px 2px 4px black);
+}
+
+/*
+* Everywhere
+*/
+.bg-orange {
+    background-color: #fa8142 !important;
+}
+
+.text-orange {
+    color: #fa8142;
+}
+
+.flex-row-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
