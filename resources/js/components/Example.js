@@ -7,9 +7,9 @@ import Button from "./button";
 import Table from "./Table";
 import { isArray, isUndefined } from "lodash";
 
-function Avatar(img) {
+function Avatar(img, column, row) {
     return (
-        <img src={/images/ + img} className="rounded-circle" width="28" height="28"></img>
+        <img src={'/storage/images/avatar/' + row.id + '/' + img} className="rounded-circle image-cover" width="28" height="28"></img>
     );
 }
 

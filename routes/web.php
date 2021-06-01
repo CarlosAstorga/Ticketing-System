@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ProjectController;
 
@@ -25,6 +26,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users/list', [UserController::class, 'list']);
         Route::resource('users', UserController::class);
+    });
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/profile', ProfileController::class)->name('profile');
+        Route::post('/{user}/avatar/update', [FileController::class, 'updateAvatar'])->name('avatar');
     });
 
     Route::get('/roles/list', [RoleController::class, 'list']);

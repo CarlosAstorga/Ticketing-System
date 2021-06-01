@@ -34,7 +34,7 @@ export default function Table({data, columns, loading, buttons, url, fn, filter}
                                                 key={column.name}
                                                 className={column.bClass && (column.bClass)}>
                                                 {column.data ? (
-                                                    column.data(row[column.field], column)
+                                                    column.data(row[column.field], column, row)
                                                 ) : (
                                                     _.get(
                                                         row,

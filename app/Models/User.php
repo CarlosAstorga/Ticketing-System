@@ -71,8 +71,8 @@ class User extends Authenticatable
 
     public function avatar()
     {
-        if (file_exists(public_path("images/{$this->profile_picture}"))) {
-            return "/images/{$this->profile_picture}";
+        if (file_exists(public_path("/storage/images/avatar/{$this->id}/{$this->profile_picture}"))) {
+            return "/storage/images/avatar/{$this->id}/{$this->profile_picture}";
         } else {
             return '/images/profile_picture.png';
         }

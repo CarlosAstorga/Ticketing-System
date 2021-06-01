@@ -77,6 +77,16 @@ body {
     object-fit: cover;
 }
 
+.image-cover {
+    object-fit: cover;
+}
+
+.avatar-profile {
+    height: 180px;
+    width: 180px;
+    object-fit: cover;
+}
+
 .avatar-profile-container {
     height: 13rem;
     width: 100%;

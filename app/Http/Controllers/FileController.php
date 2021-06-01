@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -41,5 +42,20 @@ class FileController extends Controller
     public function download(File $file)
     {
         return Storage::download('public/images/tickets/' . $file->ticket_id . '/' . $file->name);
+    }
+
+    public function updateAvatar(Request $request, User $user)
+    {
+        $validator  = Validator::make($request->all(), [
+            'file' => 'image|mimes:jpeg,png|max:3000'
+        ]);
+
+        if (!$validator->fails()) {
+            $path = $request->file('file')->store('public/images/avatar/' . $user->id);
+            $user->profile_picture = explode('/', $path)[4];
+            if ($user->save()) return redirect('/user/profile');
+        } else {
+            return redirect('/user/profile')->withErrors($validator, 'avatar');
+        }
     }
 }

@@ -16,7 +16,7 @@
 
 <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-1 col-lg-2 me-0 px-3" href="#">T-System</a>
+        <a class="navbar-brand col-md-1 col-lg-2 me-0 px-3" href="/">T-System</a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -28,8 +28,8 @@
                 <div class="position-sticky d-flex flex-column">
                     <ul class="nav flex-column">
                         <li class="nav-item border-bottom text-center">
-                            <a href="#" class="nav-link py-3" title="Perfil">
-                                <img src="{{ auth()->user()->avatar() }}" alt="avatar" width="36" height="36" class="rounded-circle"><strong class="d-md-none d-lg-inline-block ms-2">{{ auth()->user()->name }}</strong>
+                            <a href="{{ route('user.profile') }}" class="nav-link py-3 @if($module == 'profile') active @endif" title="Perfil">
+                                <img src="{{ auth()->user()->avatar() }}" alt="avatar" width="36" height="36" class="rounded-circle image-cover"><strong class="d-md-none d-lg-inline-block ms-2">{{ auth()->user()->name }}</strong>
                             </a>
                         </li>
                         <li class="nav-item ms-2 overflow-hidden">
