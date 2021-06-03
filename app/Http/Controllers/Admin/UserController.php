@@ -7,6 +7,8 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use App\Actions\Fortify\CreateNewUser;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
@@ -45,11 +47,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         abort_unless(Gate::allows('user_create'), 403, 'Acción no autorizada');
-        $user = User::create($request->validate([
-            'name'      => 'required|max:100',
-            'email'     => 'required|unique:App\Models\User,email'
-        ]));
+        $user = new CreateNewUser();
+        $user = $user->create($request->only(
+                ['name', 'email', 'password', 'password_confirmation']
+            )
+        );
         $user->roles()->sync($request->roles);
+
+        Password::sendResetLink($request->only(['email']));
         return redirect('admin/users');
     }
 

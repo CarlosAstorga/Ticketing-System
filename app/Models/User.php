@@ -6,8 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -71,10 +72,10 @@ class User extends Authenticatable
 
     public function avatar()
     {
-        if (file_exists(public_path("/storage/images/avatar/{$this->id}/{$this->profile_picture}"))) {
-            return "/storage/images/avatar/{$this->id}/{$this->profile_picture}";
+        if (Storage::disk('public')->exists("images/avatar/{$this->id}/{$this->profile_picture}")) {
+            return Storage::url("images/avatar/{$this->id}/{$this->profile_picture}");
         } else {
-            return '/images/profile_picture.png';
+            return Storage::url("images/avatar/profile_picture.png");
         }
     }
 
@@ -99,5 +100,12 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->hasRole('Administrador');
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function($query) use ($permission) {
+            $query->where('title', 'like', '%' . $permission . '%');
+        })->count();
     }
 }

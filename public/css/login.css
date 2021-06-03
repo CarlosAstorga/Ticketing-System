@@ -19,28 +19,29 @@ main {
     background-color: #12181b;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    position: relative;
-    overflow: hidden;
-    width: 384px;
-    max-width: 100%;
-    min-height: 380px;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    width: 25rem;
 }
 
 h1 {
     color: white;
+    padding-bottom: 1.5rem;
+    margin: 0;
     font-size: 24px;
+    text-align: center;
 }
 
 p {
     font-size: 14px;
     color: #b2becd;
+    margin: 4px 0;
 }
 
 a {
-    margin: 15px 0;
+    /* margin: 15px 0; */
     color: #3e73ce;
     font-size: 14px;
     text-decoration: none;
@@ -59,14 +60,8 @@ button {
 }
 
 form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 50px;
-    height: 80%;
-    text-align: center;
     width: 100%;
+    margin: 8px 0;
 }
 
 input {
@@ -82,29 +77,70 @@ input:focus {
     outline: none;
 }
 
+.input-group input:not(:last-child) {
+    margin-right: 8px;
+}
+
+.input-group input:not(:first-child) {
+    margin-left: 8px;
+}
+
 header {
+    width: 100%;
     border-bottom: 2px dashed #333;
 }
 
 footer {
+    width: 100%;
     border-top: 2px dashed #333;
+    padding-top: 1.5rem;
 }
 
-.stripe {
-    height: 10%;
-    width: 80%;
+.flex-column-center {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.flex-row-center {
+    display: flex;
+    justify-content: space-around;
+}
+
 .is-invalid {
-    border: 1px solid orangered;
+    border: 1px solid #f1962e;
 }
 
 .invalid-feedback {
-    color: orange;
-    align-self: flex-start;
-    margin-top: 8px;
+    color: #f1962e;
     font-size: 12px;
+}
+
+.alert {
+    background-color: #46a276;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10.5px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-light {
+    color: #f8f9fa;
+}
+
+.input-group {
+    display: flex;
+}
+
+
+@media screen and (max-width: 768px) {
+    main {
+        width: 100vw;
+        min-height: 100vh;
+        align-items: center;
+    }
 }

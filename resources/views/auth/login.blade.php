@@ -10,29 +10,42 @@
 
 <body>
     <main>
-        <header class="stripe">
+        <header>
             <h1>Iniciar sesión</h1>
         </header>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
+
+            @if(session('status'))
+            <div class="alert text-center">
+                <span class="text-light">{{ session('status') }}</span>
+            </div>
+            @endif
+
             <!-- Email -->
+            <input type="email" name="email" value="{{ old('email') }}" class="@error('email') is-invalid @enderror" placeholder="Correo" required />
             @error('email')
             <span class="invalid-feedback" role="alert">
                 {{ $message}}
             </span>
             @enderror
-            <input type="email" name="email" value="{{ old('email') }}" class="@error('email') is-invalid @enderror" placeholder="Correo" required />
 
             <!-- Password -->
-            <input type="password" name="password" placeholder="Contraseña" class="@error('email') is-invalid @enderror" required />
+            <input type="password" name="password" placeholder="Contraseña" class="@error('password') is-invalid @enderror" required />
+            @error('password')
+            <span class="invalid-feedback" role="alert">
+                {{ $message}}
+            </span>
+            @enderror
 
             <!-- Button -->
             <button>Entrar</button>
         </form>
 
-        <footer class="stripe">
-            <p class="text">¿No tienes cuenta? <a href="{{ route('register') }}">Registrate</a></p>
+        <footer class="flex-column-center">
+            <p>¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
+            <p>¿Olvidaste tu contraseña? <a href="{{ route('password.request') }}">Restablécela</a></p>
         </footer>
     </main>
 </body>

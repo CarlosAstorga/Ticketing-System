@@ -10,43 +10,46 @@
 
 <body>
     <main>
-        <header class="stripe">
+        <header>
             <h1>Crear cuenta</h1>
         </header>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
+
             <!-- Name -->
+            <input type="text" name="name" value="{{ old('name') }}" class="@error('name') is-invalid @enderror" placeholder="Nombre" required>
             @error('name')
             <span class="invalid-feedback" role="alert">
                 {{ $message}}
             </span>
             @enderror
-            <input type="text" name="name" value="{{ old('name') }}" class="@error('name') is-invalid @enderror" placeholder="Nombre" required>
 
             <!-- Email -->
+            <input type="email" name="email" value="{{ old('email') }}" class="@error('email') is-invalid @enderror" placeholder="Correo" required />
             @error('email')
             <span class="invalid-feedback" role="alert">
                 {{ $message}}
             </span>
             @enderror
-            <input type="email" name="email" value="{{ old('email') }}" class="@error('email') is-invalid @enderror" placeholder="Correo" required />
 
             <!-- Password -->
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Contraseña" class="@error('password') is-invalid @enderror" required />
+                <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" required />
+            </div>
             @error('password')
             <span class="invalid-feedback" role="alert">
                 {{ $message}}
             </span>
             @enderror
-            <input type="password" name="password" placeholder="Contraseña" class="@error('password') is-invalid @enderror" required />
-            <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" required />
 
             <!-- Button -->
             <button>Registrar</button>
         </form>
 
-        <footer class="stripe">
-            <p class="text">¿Ya eres usuario? <a href="{{ route('login') }}">Inicia sesión</a></p>
+        <footer class="flex-column-center">
+            <p>¿Ya eres usuario? <a href="{{ route('login') }}">Inicia sesión</a></p>
         </footer>
     </main>
 </body>

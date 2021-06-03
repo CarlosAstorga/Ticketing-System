@@ -37,6 +37,32 @@
                 </div>
             </div>
 
+            <!-- Password -->
+            <div class="row mb-3 align-items-center">
+                <label for="password" class="col-12 col-sm-2 text-sm-end mb-2 mb-sm-0 fw-bold">Contraseña</label>
+                <div class="col-12 col-sm-9 col-lg-8">
+                    <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required />
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        {{ $message}}
+                    </span>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Confirm password -->
+            <div class="row mb-3 align-items-center">
+                <label for="passwordConfirmation" class="col-12 col-sm-2 text-sm-end mb-2 mb-sm-0 fw-bold">Confirmar contraseña</label>
+                <div class="col-12 col-sm-9 col-lg-8">
+                    <input id="passwordConfirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" required />
+                    @error('password_confirmation')
+                    <span class="invalid-feedback" role="alert">
+                        {{ $message}}
+                    </span>
+                    @enderror
+                </div>
+            </div>
+            
             <!-- Role -->
             <div class="row mb-3 align-items-center">
                 <label for="roles" class="col-12 col-sm-2 text-sm-end mb-2 mb-sm-0 fw-bold">Roles</label>

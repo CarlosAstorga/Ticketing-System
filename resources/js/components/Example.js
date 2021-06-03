@@ -8,8 +8,10 @@ import Table from "./Table";
 import { isArray, isUndefined } from "lodash";
 
 function Avatar(img, column, row) {
+    let path = "/storage/images/avatar/profile_picture.png";
+    if (img) path = "/storage/images/avatar/" + row.id + "/" + img;
     return (
-        <img src={'/storage/images/avatar/' + row.id + '/' + img} className="rounded-circle image-cover" width="28" height="28"></img>
+        <img src={path} className="rounded-circle image-cover" width="28" height="28"></img>
     );
 }
 
