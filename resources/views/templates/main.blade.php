@@ -64,36 +64,32 @@
                                 <i class="fas fa-ticket-alt icon"></i><span class="d-md-none d-lg-inline-block ms-2">Tickets</span>
                             </a>
                         </li>
-                        @endcan
+                        @endcan 
                         <li class="nav-item ms-2">
-                            <a href="{{ route('logout') }}" title="Salir" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();" class="nav-link py-3">
+                            <a id="logout" href="{{ route('logout') }}" title="Salir" class="nav-link py-3">
                                 <i class="fas fa-sign-out-alt icon"></i><span class="d-md-none d-lg-inline-block ms-2">Salir</span>
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+                            <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                         </li>
                     </ul>
                 </div>
             </nav>
 
             <main class="col-md-11 ms-sm-auto col-lg-10 col-xxl-10 px-md-4">
+                @section('header')
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">@yield('header')</h1>
+                    <h1 class="h2">@yield('title')</h1>
+                    @section('btn-group')
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        @section('buttons')
                         <div class="btn-group">
-                            <a type="button" class="btn btn-sm btn-outline-secondary" href="@yield('route')"><i class="fas fa-th-list"></i></a>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('form').submit();">Guardar</button>
+                            @yield('buttons')
                         </div>
-                        @show
-                        @section('button')
-                        <a type="button" class="btn btn-sm btn-outline-secondary" href="@yield('route')">@yield('link')</a>
-                        @show
                     </div>
+                    @show
                 </div>
-                @section('contentHeader')
                 @show
                 @section('content')
+                @yield('contentHeader')
                 <div id="@yield('component')"></div>
                 @show
             </main>

@@ -1,6 +1,6 @@
 @extends('templates.main')
-@section('header', 'Usuarios')
-@section('buttons', '')
-@section('route', route('admin.users.create'))
-@section('link', 'Nuevo')
+@section('title', 'Usuarios')
+@section('buttons')
+<x-header.link route="{{ route('admin.users.create') }}" link="Nuevo" />
+@endsection
 @section('component', 'users')

@@ -11,6 +11,28 @@ window.axios = require('axios');
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').content;
 
+// Event listeners
+if (document.getElementById('logout') && document.getElementById('logoutForm')) {
+    const form = document.getElementById('logoutForm');
+    const link = document.getElementById('logout');
+    link.addEventListener('click', e => {
+        e.preventDefault();
+        form.submit();
+    });
+}
+
+if (document.getElementById('saveBtn') && document.getElementById('form')) {
+    const form = document.getElementById('form');
+    const btn = document.getElementById('saveBtn');
+    btn.addEventListener('click', e => {
+        e.target.disabled = true;
+        e.target.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>`;
+        form.submit();
+    });
+}
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
