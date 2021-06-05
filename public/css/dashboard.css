@@ -23,11 +23,11 @@ body {
 }
 
 .sidebar .nav-link.active {
-    color: #fa8142;
+    color: #00a4eb;
 }
 
 .sidebar .nav-link:hover {
-    color: #fa8142;
+    color: #00a4eb;
 }
 
 .icon {
@@ -62,11 +62,16 @@ body {
 /*
 * Dasahboard
 */
+.dash-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .dash-card-icon {
     opacity: 75%;   
     font-size: 3rem;
-    transform: rotate(45deg);
-}
+}   
 
 /*
 * Profile
@@ -103,12 +108,16 @@ body {
 /*
 * Everywhere
 */
-.bg-orange {
-    background-color: #fa8142 !important;
+.bg-blue {
+    background-color: #00a4eb !important;
 }
 
-.text-orange {
-    color: #fa8142;
+.text-blue {
+    color: #00a4eb;
+}
+
+.text-midnight {
+    color: #0e2f3c;
 }
 
 .flex-row-center {

@@ -22,6 +22,7 @@ use App\Http\Controllers\ProjectController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/chart', [DashboardController::class, 'chart']);
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users/list', [UserController::class, 'list']);

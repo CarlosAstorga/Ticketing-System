@@ -45,7 +45,7 @@ const users = [
         title: "Roles",
         data: Pills,
         field: "roles",
-        cClass: "bg-orange"
+        cClass: "bg-blue"
     }
 ];
 
@@ -109,7 +109,7 @@ const roles = [
         title:  "Permisos",
         data: Pills,
         field: 'permissions',
-        cClass: 'bg-orange',
+        cClass: 'bg-blue',
         bClass: 'text-wrap'
     }
 ];

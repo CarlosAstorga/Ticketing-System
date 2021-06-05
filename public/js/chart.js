@@ -1,37 +1,79 @@
 const chart = document.getElementById("chart");
 if (chart) {
-    const { open, solving, pending, solved, closed } = chart.dataset;
+    const months = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+    ];
+    fetch("/chart")
+        .then((response) => response.json())
+        .then((response) => {
+            let array = [];
+            for (let i = 0; i < months.length; i++) {
+                const found = response.find((item) => item.m - 1 === i);
+                if (found)
+                    array.push({
+                        x: months[found.m - 1],
+                        y: found.tickets_count,
+                    });
+                else array.push({ x: months[i], y: 0 });
+            }
+            return array;
+        })
+        .then((data) => {
+            renderChart(data);
+        });
 
-    const data = {
-        labels: ["Abierto", "En proceso", "Pendiente", "Resuelto", "Cerrado"],
-        datasets: [
-            {
-                label: "Tickets por estatus",
-                data: [open, solving, pending, solved, closed],
-                backgroundColor: [
-                    "#424548",
-                    "#ffca2b",
-                    "#e15360",
-                    "#31d2f2",
-                    "#fa935e",
+    function renderChart(data) {
+        var timeFormat = "DD/MM/YYYY";
+        var config = {
+            type: "line",
+            data: {
+                datasets: [
+                    {
+                        label: "Tickets creados",
+                        data: data,
+                        fill: false,
+                        borderColor: "#00a4eb"
+                    },
                 ],
-                hoverOffset: 4,
             },
-        ],
-    };
-
-    const config = {
-        type: "doughnut",
-        data: data,
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Tickets por estatus",
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [
+                        {
+                            type: "time",
+                            time: {
+                                format: timeFormat,
+                                tooltipFormat: "ll",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Date",
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            scaleLabel: {
+                                display: true,
+                                labelString: "value",
+                            },
+                        },
+                    ],
                 },
             },
-        },
-    };
-
-    new Chart(chart, config);
+        };
+        new Chart(chart, config);
+    }
 }
