@@ -10,16 +10,16 @@
         @if($user->exists) @method('PUT') @endif
         @csrf
         <x-card.header header="Datos ganerales" />
-        <x-card.body class="my-md-3 my-lg-5">
-            <x-inline-input label="Nombre" name="name" :value="$user->name" />
-            <x-inline-input label="Correo" name="email" :value="$user->email" />
+        <x-card.body class="my-md-3">
+            <x-inline-input class="mb-3" label="Nombre" name="name" :value="$user->name" />
+            <x-inline-input class="mb-3" label="Correo" name="email" :value="$user->email" />
 
             @if(!$user->exists)
-            <x-inline-input label="Contraseña" name="password" type="password" />
-            <x-inline-input label="Confirmar" name="password_confirmation" type="password" />
+            <x-inline-input class="mb-3" label="Contraseña" name="password" type="password" />
+            <x-inline-input class="mb-3" label="Confirmar" name="password_confirmation" type="password" />
             @endif
 
-            <x-inline-input label="Roles" name="roles">
+            <x-inline-input label="Roles" name="roles" required="0">
                 @foreach($roles as $role)
                 <div class="form-check mt-2">
                     @if ($user->roles()->count())

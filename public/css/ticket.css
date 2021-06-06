@@ -61,7 +61,7 @@
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: #fa8142 #191c1f;
+    scrollbar-color: #00a4eb #0e2f3c;
 }
 
 *::-webkit-scrollbar {
@@ -70,19 +70,19 @@
 }
 
 *::-webkit-scrollbar-track {
-    background-color: #191c1f;
+    background-color: #0e2f3c;
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #fa8142;
+    background-color: #00a4eb;
 }
 
 .preview-container {
     display: flex;
     margin-top: 3rem;
     margin-bottom: 1rem;
-    max-height: calc(100vh - 160px);
-    height: calc(100vh - 160px);
+    max-height: calc(100vh - 170px);
+    height: calc(100vh - 170px);
 }
 
 .preview-image {
@@ -105,6 +105,15 @@
     cursor: pointer;
     opacity: 50%;
     border-radius: 5px;
+    margin: .4rem;
+}
+
+.roll-thumbnail:first-child {
+    margin: .4rem .4rem .4rem 0;
+}
+
+.roll-thumbnail:last-child {
+    margin: .4rem 0 .4rem .4rem;
 }
 
 .thumbnail-roll > .active {
@@ -114,10 +123,10 @@
 .thumbnail-roll {
     position: relative;
     z-index: 2;
-    display: grid;
-    grid-auto-flow: column;
-    grid-gap: 0.8rem;
+    display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
+    margin: 0 auto;
 }
 
 .modal-buttons {

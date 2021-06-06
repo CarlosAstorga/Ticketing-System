@@ -1,4 +1,4 @@
-@props(['header'])
+@props(['header' => ''])
 <div {{ $attributes->merge(['class' => 'card-header']) }}>
-    {{ $header }}
+    @if($slot->isNotEmpty()) {{ $slot }} @else {{ $header }} @endif
 </div>

@@ -1,6 +1,6 @@
 @extends('templates.main')
-@section('header', 'Tickets')
-@section('buttons', '')
-@section('route', route('tickets.create'))
-@section('link', 'Nuevo')
+@section('title', 'Tickets')
+@section('buttons')
+<x-header.link route="{{ route('tickets.create') }}" link="Nuevo" />
+@endsection
 @section('component', 'tickets')

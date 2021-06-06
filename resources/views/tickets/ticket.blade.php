@@ -2,54 +2,43 @@
 @section('styles')
 <link href="{{ asset('css/ticket.css') }}" rel="stylesheet">
 @endsection
-@section('header', 'Ticket #' . $ticket->id)
+@section('title', 'Ticket #' . $ticket->id)
 @section('buttons')
-<div class="btn-group">
-    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ route('tickets.index') }}"><i class="fas fa-th-list"></i></a>
-</div>
+<x-header.link route="{{ route('tickets.index') }}" />
 @endsection
-@section('button', '')
 @section('content')
-<div class="card">
-    <div class="card-header">Datos generales</div>
-    <div class="card-body my-3 my-sm-5">
-        <div class="row mb-2">
-            <p class="col-12 col-sm-4 text-sm-end mb-0 fw-bold">Asunto</p>
-            <p class="col-12 col-sm-8 mb-0">{{ $ticket->title }}</p>
-        </div>
-        <div class="row mb-2">
-            <p class="col-12 col-sm-4 text-sm-end mb-0 fw-bold">Descripción</p>
-            <p class="col-12 col-sm-8 mb-0">{{ $ticket->description }}</p>
-        </div>
+<x-card.main class="border-light">
+    <x-card.header header="Datos generales" />
+    <x-card.body class="my-md-3">
+        <x-inline-text title="Asunto" :text="$ticket->title" />
+        <x-inline-text title="Descripción" :text="$ticket->description" />
         @can('user_assigment')
         @isset($ticket->project)
-        <div class="row align-items-center">
-            <p class="col-12 col-sm-4 text-sm-end mb-0 fw-bold">Proyecto</p>
-            <p class="col-12 col-sm-8 mb-0">{{ $ticket->project->title }}</p>
-        </div>
+        <x-inline-text title="Proyecto" :text="$ticket->project->title" />
         @endisset
         @endcan
-    </div>
-</div>
-<div class="card">
-    <div class="card-header d-flex justify-content-between">
+    </x-card.body>
+</x-card.main>
+
+<x-card.main class="border-light">
+    <x-card.header class="d-flex justify-content-between">
         <p class="mb-0 align-self-center">Subir archivos</p>
         <div class="btn-group">
             <button id="fileUploadButton" type="button" class="btn btn-sm btn-outline-secondary fas fa-upload" disabled></button>
             <button id="fileButton" class="btn btn-sm btn-outline-secondary">Examinar...</button>
             <input type="file" class="form-control d-none" multiple accept=".jpg, .png" name="image" id="file">
         </div>
-    </div>
+    </x-card.header>
     <p id="fileMessage" class="text-center py-3 fw-light fst-italic mb-0 border-bottom">Sin archivos seleccionados</p>
     <ul id="fileListContainer" class="card-body py-0 mb-0">
-    </ul>
-</div>
-<div class="card">
-    <div class="card-header">Archivos</div>
-    <div class="card-body">
+</x-card.main>
+
+<x-card.main class="border-light">
+    <x-card.header header="Archivos" />
+    <x-card.body>
         <div id="gallery" class="gallery"></div>
-    </div>
-</div>
+    </x-card.body>
+</x-card.main>
 
 <!-- Modal -->
 <div class="modal" id="modal" tabindex="-1" aria-hidden="true">
@@ -64,7 +53,13 @@
                     <div id="previewOverlay" class="overlay"></div>
                     <img class="preview-image" id="preview">
                 </div>
-                <div class="thumbnail-roll"></div>
+                <div class="row">
+                    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+                        <div class="d-flex">
+                            <div class="thumbnail-roll"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -96,6 +91,7 @@
     fileButton.addEventListener('click', () => fileInput.click());
 
     fileUploadButton.addEventListener('click', () => {
+        event.target.disabled = true;
         const files = fileList.filter(
             file => file.visible && file.success
         );

@@ -6,8 +6,8 @@
 @section('content')
 <x-card.main class="border-light">
     <x-card.header header="Datos generales" />
-    <x-card.body class="my-5">
-        <x-inline-text title="Título" :text="$project->title" />
+    <x-card.body class="my-md-3">
+        <x-inline-text class="mb-3" title="Título" :text="$project->title" />
         <x-inline-text title="Descripción" :text="$project->description" />
     </x-card.body>
 </x-card.main>

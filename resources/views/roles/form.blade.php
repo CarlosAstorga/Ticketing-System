@@ -10,7 +10,7 @@
     @csrf
     <x-card.main class="border-light">
         <x-card.header header="Datos generales" />
-        <x-card.body class="my-5">
+        <x-card.body class="my-md-3">
             <x-inline-input label="Título" name="title" :value="$role->title" />
         </x-card.body>
     </x-card.main>

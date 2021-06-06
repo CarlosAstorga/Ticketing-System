@@ -27,7 +27,7 @@
                             <input class="d-none" type="file" name="file" id="fileInput" accept=".jpg, .png">
                         </form>
                     </div>
-                    <x-card.body class="flex-column-center my-5">
+                    <x-card.body class="flex-column-center my-md-3">
                         <p class="lead fw-bold mb-0">{{ auth()->user()->name }}</p>
                         <p class="fst-italic">{{ auth()->user()->email }}</p>
                         @foreach(auth()->user()->roles as $role)
@@ -46,16 +46,16 @@
             <div class="col-12">
                 <x-card.main class="border-light">
                     <x-card.header header="Actualizar usuario" />
-                    <x-card.body class="my-5">
+                    <x-card.body class="my-md-3">
                         <form id="userForm" method="POST" action="{{ route('user-profile-information.update') }}">
                             @csrf
                             @method("PUT")
-                            <x-inline-input label="Nombre" name="name" value="{{ auth()->user()->name }}" errorBag="updateProfileInformation" />
+                            <x-inline-input class="mb-3" label="Nombre" name="name" value="{{ auth()->user()->name }}" errorBag="updateProfileInformation" />
 
-                            <x-inline-input label="Correo" name="email" value="{{ auth()->user()->email }}" type="email" errorBag="updateProfileInformation" />
+                            <x-inline-input class="mb-3" label="Correo" name="email" value="{{ auth()->user()->email }}" type="email" errorBag="updateProfileInformation" />
 
                             <div class="row">
-                                <div class="col-12 col-sm-2 col-lg-1 offset-sm-3">
+                                <div class="col-12 col-sm-2 offset-sm-3 offset-lg-2">
                                     <button type="submit" class="btn btn-sm btn-outline-success w-100">Guardar</button>
                                 </div>
                             </div>
@@ -67,18 +67,18 @@
             <div class="col-12">
                 <x-card.main class="border-light">
                     <x-card.header header="Actualizar contraseña" />
-                    <x-card.body class="my-5">
+                    <x-card.body class="my-md-3">
                         <form id="passForm" method="POST" action="{{ route('user-password.update') }}">
                             @csrf
                             @method("PUT")
-                            <x-inline-input label="Contraseña" name="current_password" type="password" errorBag="updatePassword" />
+                            <x-inline-input class="mb-3" label="Contraseña" name="current_password" type="password" errorBag="updatePassword" />
 
-                            <x-inline-input label="Nueva Contraseña" name="password" type="password" errorBag="updatePassword" />
+                            <x-inline-input class="mb-3" label="Nueva Contraseña" name="password" type="password" errorBag="updatePassword" />
 
-                            <x-inline-input label="Confirmar" name="password_confirmation" type="password" errorBag="updatePassword" />
+                            <x-inline-input class="mb-3" label="Confirmar" name="password_confirmation" type="password" errorBag="updatePassword" />
 
                             <div class="row">
-                                <div class="col-12 col-sm-2 col-lg-1 offset-sm-3">
+                                <div class="col-12 col-sm-2 offset-sm-3 offset-lg-2">
                                     <button type="submit" class="btn btn-sm btn-outline-success w-100">Guardar</button>
                                 </div>
                             </div>

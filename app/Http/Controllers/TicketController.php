@@ -147,16 +147,14 @@ class TicketController extends Controller
             $users = User::whereHas('roles', function ($query) {
                 $query->whereHas('permissions', function ($query) {
                     $query->where('title', '=', 'ticket_resolve');
-                });
+                }); 
             })->get();
-            $status = Gate::allows('ticket_close') ?
-                Status::get() : Status::where('id', '<', 4)->get();
 
             $catalogs['user']       = $users;
-            $catalogs['status']     = $status;
             $catalogs['project']    = Project::get();
             $catalogs['priority']   = Priority::get();
         }
+
         $catalogs['category']       = Category::get();
         return $catalogs;
     }
