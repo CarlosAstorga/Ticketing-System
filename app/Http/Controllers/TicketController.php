@@ -65,7 +65,8 @@ class TicketController extends Controller
         abort_unless(Gate::allows('ticket_show'), 403, 'Acción no autorizada');
         return view('tickets.ticket', [
             'module'    => 'tickets',
-            'ticket'    => $ticket
+            'ticket'    => $ticket,
+            'status'    => $this->catalogs('status')
         ]);
     }
 
@@ -115,6 +116,20 @@ class TicketController extends Controller
         $ticket->delete();
     }
 
+    /**
+     * Update the status
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function updateStatus(Request $request, Ticket $ticket)
+    {
+        abort_unless(Gate::allows('ticket_resolve') || Gate::allows('ticket_close'), 403, 'Acción no autorizada');
+        $ticket->update($this->validateRequest($request, 'status_id'));
+        return redirect('tickets/' . $ticket->id);
+    }
+
     public function list(Request $request)
     {
         $filter = $request->input('filter', null);
@@ -141,13 +156,13 @@ class TicketController extends Controller
         return $paginator;
     }
 
-    public function catalogs()
+    public function catalogs($catalog = '')
     {
         if (Gate::allows('user_assigment')) {
             $users = User::whereHas('roles', function ($query) {
                 $query->whereHas('permissions', function ($query) {
                     $query->where('title', '=', 'ticket_resolve');
-                }); 
+                });
             })->get();
 
             $catalogs['user']       = $users;
@@ -155,31 +170,40 @@ class TicketController extends Controller
             $catalogs['priority']   = Priority::get();
         }
 
+        if (Gate::allows('ticket_resolve')) $statusIds = [2, 3, 4];
+        if (Gate::allows('ticket_close')) count($statusIds) ? array_push($statusIds, 5) : $statusIds = [5];
+
         $catalogs['category']       = Category::get();
-        return $catalogs;
+        $catalogs['status']         = Status::whereIn('id', $statusIds ?? [])->get();
+
+        return $catalogs[$catalog] ?? $catalogs;
     }
 
-    public function validateRequest($request)
+    public function validateRequest($request, $column = '')
     {
         $rules = [
             'title'          => 'required|max:100',
             'description'    => 'required|max:150',
-            'category_id'    => 'required|exists:App\Models\Category,id'
+            'category_id'    => 'required|exists:App\Models\Category,id',
+            'due_date'       => 'nullable|date_format:Y-m-d|after:yesterday'
         ];
-        $request->due_date      ? $rules['due_date']    = 'date_format:Y-m-d|after:yesterday'       : null;
-        $request->project_id    ? $rules['project_id']  = 'exists:App\Models\Project,id'            : null;
 
         if (Gate::allows('user_assigment')) {
             $rules['developer_id']  = 'required|exists:App\Models\User,id';
             $rules['priority_id']   = 'required|exists:App\Models\Priority,id';
+            $rules['project_id']    = 'nullable|exists:App\Models\Project,id';
         }
 
         if (Gate::allows('ticket_close') || Gate::allows('ticket_resolve')) {
-            $rules['status_id']     = 'required|exists:App\Models\Status,id';
+            $rules['status_id']     = 'nullable|exists:App\Models\Status,id';
         }
 
-        $validatedData = $request->validate($rules);
-        $validatedData['submitter_id'] = $request->user()->id;
+        if (isset($rules[$column])) {
+            return $request->validate([$column => $rules[$column]]);
+        }
+
+        $validatedData                  = $request->validate($rules);
+        $validatedData['submitter_id']  = $request->user()->id;
         return $validatedData;
     }
 }

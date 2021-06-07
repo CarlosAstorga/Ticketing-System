@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -86,8 +87,7 @@ class Ticket extends Model
 
     public function getRowClassAttribute()
     {
-        if ($this->status_id == 4)                              return 'table-primary text-primary';
-        if ($this->priority_id == 3 && $this->status_id != 4)   return 'table-danger text-danger';
+        if (isset($this->due_date) && Carbon::now()->greaterThanOrEqualTo($this->due_date) && $this->status_id < 4) return 'table-danger text-danger';
     }
 
     public function scopeFiltered($query, $filter)

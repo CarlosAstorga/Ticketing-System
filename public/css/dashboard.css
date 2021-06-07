@@ -117,11 +117,11 @@ body {
 }
 
 .text-blue {
-    color: #00a4eb;
+    color: #00a4eb !important;
 }
 
 .text-midnight {
-    color: #0e2f3c;
+    color: #0e2f3c !important;
 }
 
 .flex-row-center {
@@ -135,6 +135,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.border-radius-0 {
+    border-radius: 0 !important;
 }
 
 

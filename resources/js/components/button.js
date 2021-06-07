@@ -6,7 +6,7 @@ export default function Button({ id, fn, tableUrl, filter, button }) {
         <>
             {condition(id) && (
                 <a
-                    className="flex-fill btn btn-light border-0 lh-lg"
+                    className="flex-fill btn btn-light border-0 lh-lg border-radius-0"
                     onClick={() => cb(url, id, fn, filter, tableUrl)}
                 >
                     <i className={icon}></i>

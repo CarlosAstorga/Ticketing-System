@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
 
     Route::get('tickets/list', [TicketController::class, 'list'])->name('tickets.');
+    Route::post('tickets/{ticket}/updateStatus', [TicketController::class, 'updateStatus'])->name('tickets-status.update');
     Route::resource('tickets', TicketController::class);
 
     Route::get('projects/list', [ProjectController::class, 'list'])->name('projects.');

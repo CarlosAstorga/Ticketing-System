@@ -45,7 +45,7 @@ export default function Table({data, columns, loading, buttons, url, fn, filter}
                                         );
                                     })}
                                     {buttons.length > 0 && (
-                                        <td className="p-0 d-flex">
+                                        <td className="p-0 d-flex border-0">
                                             {buttons.map(button => {
                                                 return (
                                                     <Button

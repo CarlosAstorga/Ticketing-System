@@ -5,6 +5,24 @@
 @section('title', 'Ticket #' . $ticket->id)
 @section('buttons')
 <x-header.link route="{{ route('tickets.index') }}" />
+@if(Auth::user()->can('ticket_close') || Auth::user()->can('ticket_resolve'))
+<x-header.button />
+<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+</button>
+<ul id="dropdown" class="dropdown-menu p-3">
+    <form id="form" method="POST" action="{{ route('tickets-status.update', $ticket->id) }}">
+        @csrf
+        @foreach($status as $s)
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="status_id" value="{{ $s->id }}" id="{{ $s->title }}" @if($ticket->status_id == $s->id) checked @endif>
+            <label class="form-check-label" for="{{ $s->title }}">
+                {{ $s->title }}
+            </label>
+        </div>
+        @endforeach
+    </form>
+</ul>
+@endif
 @endsection
 @section('content')
 <x-card.main class="border-light">
@@ -17,6 +35,7 @@
         <x-inline-text title="Proyecto" :text="$ticket->project->title" />
         @endisset
         @endcan
+        <x-inline-text title="Estatus" :text="$ticket->status->title" color="blue" />
     </x-card.body>
 </x-card.main>
 
@@ -79,6 +98,7 @@
     const fileListContainer = document.getElementById('fileListContainer');
     const downloadButton = document.getElementById('downloadButton');
     const previewOverlay = document.getElementById('previewOverlay');
+    const dropdown = document.getElementById('dropdown');
     const preview = document.getElementById('preview');
     const gallery = document.getElementById('gallery');
     const roll = document.querySelector('.thumbnail-roll');
@@ -105,6 +125,8 @@
         handleSelectedFiles();
         event.target.value = '';
     });
+
+    dropdown.addEventListener('click', () => event.stopPropagation());
 
     /*********************************************************
      <--------------------* I M A G E S *-------------------->
