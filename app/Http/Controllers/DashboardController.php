@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,26 +22,18 @@ class DashboardController extends Controller
 
     public function tickets()
     {
-        return User::withCount([
-            'submittedTickets as open'      => function ($query) {
-                $query->where('status_id', 1);
-            },
-            'submittedTickets as solving'   => function ($query) {
-                $query->where('status_id', 2);
-            },
-            'submittedTickets as pending'   => function ($query) {
-                $query->where('status_id', 3);
-            },
-            'submittedTickets as solved'    => function ($query) {
-                $query->where('status_id', 4);
-            },
-            'submittedTickets as closed'    => function ($query) {
-                $query->where('status_id', 5);
-            },
-            'submittedTickets as tickets_count'
-        ])->with(['submittedTickets'        => function ($query){
-                $query->orderBy('id', 'DESC')->limit(6);
-        }])->find(auth()->user()->id);
+        $tickets = DB::table('tickets')->select(DB::raw('count(*) as total, status_id'));
+
+        if (Gate::denies('user_assigment')) {
+            $tickets = $tickets->where(function ($query) {
+                $query->where('submitter_id', auth()->user()->id)
+                    ->orWhere('developer_id', auth()->user()->id);
+            });
+        }
+
+        $tickets = $tickets->groupBy('status_id')->get();
+        $plucked = $tickets->pluck('total', 'status_id');
+        return $plucked;
     }
 
     public function chart(Request $request) {

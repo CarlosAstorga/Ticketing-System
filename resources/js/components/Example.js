@@ -6,6 +6,7 @@ import Paginator from "./paginator";
 import Button from "./button";
 import Table from "./Table";
 import { isArray, isUndefined } from "lodash";
+import axios from "axios";
 
 function Avatar(img, column, row) {
     let path = "/storage/images/avatar/profile_picture.png";
@@ -19,7 +20,7 @@ function Pills(array, column) {
     const { cClass = "bg-danger" } = column;
     return array.map(row => {
         return (
-            <span key={row.id} className={`badge ${cClass} me-1`}>{row.title}</span>
+            <span key={row.id} className={`badge rounded-pill ${cClass} me-1`}>{row.title}</span>
         )
     });
 }
@@ -213,19 +214,31 @@ if (document.getElementById('tickets')) {
     const container = document.getElementById("tickets");
     let buttons = [
         {
+            cb: handleStatus,
+            icon: "far fa-check-circle",
+            condition: (id) => {return id != 5},
+            column: "status_id"
+        },
+        {
             cb: handleView,
             icon: "fas fa-eye",
-            url: "tickets"
+            url: "tickets",
+            condition: (id) => {return id != 5},
+            column: "status_id"
         },
         {
             cb: handleEdit,
             icon: "fas fa-edit",
-            url: "tickets"
+            url: "tickets",
+            condition: (id) => {return id != 5},
+            column: "status_id"
         },
         {
             cb: handleDelete,
             icon: "fas fa-trash text-danger",
-            url: "tickets"
+            url: "tickets",
+            condition: (id) => {return id != 5},
+            column: "status_id"
         }
     ];
     ReactDOM.render(
@@ -254,6 +267,14 @@ function handleDelete(url, id, fn, filter, tableUrl) {
             }
         }).then(fn(tableUrl, filter));
     }
+}
+
+function handleStatus(url = '', id, fn, filter, tableUrl) {
+    axios({
+        method: 'post',
+        url: `tickets/${id}/updateStatus`,
+        data: { status_id: 5 }
+    }).then(fn(tableUrl, filter));
 }
 
 if (document.getElementById('roles')) {

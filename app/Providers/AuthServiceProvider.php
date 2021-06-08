@@ -40,5 +40,14 @@ class AuthServiceProvider extends ServiceProvider
                 return count(array_intersect($user->roles->pluck('id')->toArray(), $roles)) > 0;
             });
         }
+
+        Gate::define('ticket_responsible', function (\App\Models\User $user, \App\Models\Ticket $ticket) {
+            return $ticket->status_id != 5 && ($user->hasPermission('user_assigment') ||
+                $user->id == $ticket->submitter_id || $user->id == $ticket->developer_id);
+        });
+
+        Gate::before(function ($user) {
+            if ($user->isAdmin()) return true;
+        });
     }
 }

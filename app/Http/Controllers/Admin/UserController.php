@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use App\Actions\Fortify\CreateNewUser;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
@@ -53,7 +54,7 @@ class UserController extends Controller
             )
         );
         $user->roles()->sync($request->roles);
-
+        $user->sendEmailVerificationNotification();
         Password::sendResetLink($request->only(['email']));
         return redirect('admin/users');
     }
@@ -100,7 +101,8 @@ class UserController extends Controller
             'email'     => 'required|'
         ]));
         $user->roles()->sync($request->roles);
-        return redirect('admin/users');
+        if($request->user()->hasPermission('user_access')) return redirect('admin/users');
+        return redirect('/');
     }
 
     /**
@@ -135,5 +137,14 @@ class UserController extends Controller
         $users = $users->orderBy('id', 'DESC');
         $paginator = $users->paginate(10);
         return $paginator;
+    }
+
+    public function permissions() {
+        $permissions = Permission::get();
+        foreach ($permissions as $p) {
+            $permission[$p->title] = auth()->user()->hasPermission($p->title);
+        }
+
+        return $permission;
     }
 }

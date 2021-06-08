@@ -50,6 +50,7 @@ export default function Table({data, columns, loading, buttons, url, fn, filter}
                                                 return (
                                                     <Button
                                                         key={button.icon}
+                                                        row={row}
                                                         id={row.id}
                                                         fn={fn}
                                                         tableUrl={url}

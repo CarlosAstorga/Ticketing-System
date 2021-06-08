@@ -20,7 +20,7 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/chart', [DashboardController::class, 'chart']);
 
@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/profile', ProfileController::class)->name('profile');
+        Route::get('/permissions', [UserController::class, 'permissions'])->name('permissions');
         Route::post('/{user}/avatar/update', [FileController::class, 'updateAvatar'])->name('avatar');
     });
 

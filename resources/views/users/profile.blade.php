@@ -29,7 +29,7 @@
                     </div>
                     <x-card.body class="flex-column-center my-md-3">
                         <p class="lead fw-bold mb-0">{{ auth()->user()->name }}</p>
-                        <p class="fst-italic">{{ auth()->user()->email }}</p>
+                        <p class="fst-italic text-blue">{{ auth()->user()->email }}</p>
                         @foreach(auth()->user()->roles as $role)
                         <p class="mb-0">{{ $role->title }}</p>
                         @endforeach

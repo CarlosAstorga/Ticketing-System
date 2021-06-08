@@ -1,3 +1,4 @@
+const cards = document.getElementById('cards');
 const chart = document.getElementById("chart");
 if (chart) {
     const months = [
@@ -31,6 +32,7 @@ if (chart) {
         })
         .then((data) => {
             renderChart(data);
+            cards.classList.remove('d-none');
         });
 
     function renderChart(data) {

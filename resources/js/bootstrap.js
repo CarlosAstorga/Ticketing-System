@@ -33,6 +33,13 @@ if (document.getElementById('saveBtn') && document.getElementById('form')) {
     });
 }
 
+axios({
+    method: 'get',
+    url: `user/permissions`,
+}).then(response => {
+    window.permissions = response.data;
+});
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

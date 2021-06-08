@@ -50,7 +50,9 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         abort_unless(Gate::allows('ticket_create'), 403, 'Acción no autorizada');
-        Ticket::create($this->validateRequest($request));
+        $data               = $this->validateRequest($request);
+        $data['status_id']  = isset($data['developer_id']) ? 2 : 1;
+        Ticket::create($data);
         return redirect('tickets');
     }
 
@@ -62,7 +64,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        abort_unless(Gate::allows('ticket_show'), 403, 'Acción no autorizada');
+        abort_unless(Gate::allows('ticket_show') && Gate::allows('ticket_responsible', $ticket), 403, 'Acción no autorizada');
         return view('tickets.ticket', [
             'module'    => 'tickets',
             'ticket'    => $ticket,
@@ -78,7 +80,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        abort_unless(Gate::allows('ticket_edit'), 403, 'Acción no autorizada');
+        abort_unless(Gate::allows('ticket_edit') && Gate::allows('ticket_responsible', $ticket), 403, 'Acción no autorizada');
         return view('tickets.form', [
             'module'    => 'tickets',
             'ticket'    => $ticket,
