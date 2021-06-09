@@ -46,6 +46,7 @@
         <footer class="flex-column-center">
             <p>¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
             <p>¿Olvidaste tu contraseña? <a href="{{ route('password.request') }}">Restablécela</a></p>
+            <p>¿Quieres probar el sitio? <a href="{{ route('demo') }}">Demo</a></p>
         </footer>
     </main>
 </body>

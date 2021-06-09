@@ -28,7 +28,7 @@
 <x-card.main class="border-light">
     <x-card.header header="Datos generales" />
     <x-card.body class="my-md-3">
-        <x-inline-text title="Asunto" :text="$ticket->title" />
+        <x-inline-text title="Título" :text="$ticket->title" />
         <x-inline-text title="Descripción" :text="$ticket->description" />
         @can('user_assigment')
         @isset($ticket->project)

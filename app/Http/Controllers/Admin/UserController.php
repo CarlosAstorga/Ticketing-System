@@ -140,9 +140,10 @@ class UserController extends Controller
     }
 
     public function permissions() {
+        $user = User::find(auth()->id());
         $permissions = Permission::get();
         foreach ($permissions as $p) {
-            $permission[$p->title] = auth()->user()->hasPermission($p->title);
+            $permission[$p->title] = $user->hasPermission($p->title);
         }
 
         return $permission;

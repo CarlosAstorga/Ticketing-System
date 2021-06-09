@@ -16,7 +16,7 @@
         <x-card.body class="my-md-3 row">
             <!-- Title -->
             <div class="col-12 col-lg-6 mb-3">
-                <label for="title" class="form-label fw-bold">Asunto<span class="text-blue">*</span></label>
+                <label for="title" class="form-label fw-bold">Título<span class="text-blue">*</span></label>
                 <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $ticket->title) }}" autofocus maxlength="100">
                 @error('title')
                 <span class="invalid-feedback" role="alert">

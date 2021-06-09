@@ -11,7 +11,7 @@
         <form id="form" method="POST" action="@if($project->exists) {{ route('projects.update', $project->id) }} @else {{ route('projects.store') }} @endif">
             @csrf
             @if($project->exists) @method('PUT') @endif
-            <x-inline-input class="mb-3" label="Asunto" name="title" :value="$project->title" />
+            <x-inline-input class="mb-3" label="Título" name="title" :value="$project->title" />
             <x-inline-input label="Descripción" name="description" :value="$project->description" type="textarea" />
         </form>
     </x-card.body>

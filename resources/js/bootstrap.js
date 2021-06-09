@@ -35,7 +35,7 @@ if (document.getElementById('saveBtn') && document.getElementById('form')) {
 
 axios({
     method: 'get',
-    url: `user/permissions`,
+    url: `/user/permissions`,
 }).then(response => {
     window.permissions = response.data;
 });

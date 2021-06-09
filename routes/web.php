@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ProjectController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,7 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::middleware(['verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/chart', [DashboardController::class, 'chart']);
 
@@ -31,22 +33,27 @@ Route::middleware(['verified'])->group(function () {
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/profile', ProfileController::class)->name('profile');
-        Route::get('/permissions', [UserController::class, 'permissions'])->name('permissions');
         Route::post('/{user}/avatar/update', [FileController::class, 'updateAvatar'])->name('avatar');
     });
 
     Route::get('/roles/list', [RoleController::class, 'list']);
     Route::resource('roles', RoleController::class);
 
-    Route::get('tickets/list', [TicketController::class, 'list'])->name('tickets.');
+    Route::get('tickets/list', [TicketController::class, 'list']);
     Route::post('tickets/{ticket}/updateStatus', [TicketController::class, 'updateStatus'])->name('tickets-status.update');
     Route::resource('tickets', TicketController::class);
 
-    Route::get('projects/list', [ProjectController::class, 'list'])->name('projects.');
-    Route::get('projects/{project}/tickets', [TicketController::class, 'ticketsByProject'])->name('projects.');
+    Route::get('projects/list', [ProjectController::class, 'list']);
+    Route::get('projects/{project}/tickets', [TicketController::class, 'ticketsByProject']);
     Route::resource('projects', ProjectController::class);
 
     Route::post('/tickets/{ticket}/upload', [FileController::class, 'upload']);
     Route::get('/files/{file}/download', [FileController::class, 'download']);
     Route::delete('/files/{file}', [FileController::class, 'destroy']);
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/permissions', [UserController::class, 'permissions'])->name('user.permissions');
+});
+
+Route::get('/demo', LoginController::class)->name('demo')->middleware(['guest']);
