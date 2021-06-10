@@ -75,7 +75,7 @@ class User extends Authenticatable implements MustVerifyEmail
         if (Storage::disk('public')->exists("images/avatar/{$this->id}/{$this->profile_picture}")) {
             return Storage::url("images/avatar/{$this->id}/{$this->profile_picture}");
         } else {
-            return Storage::url("images/avatar/profile_picture.png");
+            return "/images/profile_picture.png";
         }
     }
 

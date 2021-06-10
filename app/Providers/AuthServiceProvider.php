@@ -28,7 +28,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $roles = Role::get();
-
+        $permissionsArray = [];
+        
         foreach ($roles as $role) {
             foreach ($role->permissions as $permissions) {
                 $permissionsArray[$permissions->title][] = $role->id;

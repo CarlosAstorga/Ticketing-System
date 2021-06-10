@@ -8,7 +8,7 @@ import Paginator from "./paginator";
 import { isUndefined } from "lodash";
 
 function Avatar(img, column, row) {
-    let path = "/storage/images/avatar/profile_picture.png";
+    let path = "/images/profile_picture.png";
     if (img) path = "/storage/images/avatar/" + row.id + "/" + img;
     return (
         <img

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class UserSeeder extends Seeder
 {
@@ -25,5 +26,7 @@ class UserSeeder extends Seeder
 
         User::create($data);
         User::factory()->times(10)->create();
+        Storage::deleteDirectory('/public/images/avatar/');
+        Storage::deleteDirectory('/public/images/tickets/');
     }
 }
