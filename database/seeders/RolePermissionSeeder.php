@@ -15,9 +15,32 @@ class RolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = Permission::all()->pluck('id');
+        $roles              = Role::all();
+        $permissions        = Permission::all();
 
-        Role::find(1)->permissions()->sync($permissions);
+        $roles->each(function($role) use($permissions) {
+            switch ($role->id) {
+                case 1:
+                    $ids    = $permissions;
+                    break;
+                case 2:
+                    $ids    = $permissions->filter(function($permission) {
+                        return $permission->id == 6 || $permission->module_id > 3;
+                    });
+                    break;
+                case 3:
+                    $ids    = $permissions->filter(function($permission) {
+                        return $permission->module_id == 5 && $permission->id != 23;
+                    });
+                    break;
+                default:
+                    $ids    = $permissions->filter(function($permission) {
+                        return $permission->module_id == 5 && $permission->id != 20 && $permission->id != 22 && $permission->id != 23;
+                    });
+                    break;
+            }
+            $role->permissions()->sync($ids->pluck('id'));
+        });
 
         // Role::all()->each(function ($role) use ($permissions) {
         //     $role->permissions()->attach(

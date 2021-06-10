@@ -7,13 +7,13 @@ export default function Button({ row, id, fn, tableUrl, filter, button }) {
         <>
             {condition(row[column]) && hasPermission ? (
                 <a
-                    className="flex-fill btn btn-light border-0 lh-lg border-radius-0"
+                    className="flex-fill btn border-0 lh-lg border-radius-0"
                     onClick={() => cb(url, id, fn, filter, tableUrl)}
                 >
                     <i className={icon}></i>
                 </a>
             ) : (
-                <a className="flex-fill btn btn-light border-0 lh-lg border-radius-0 disabled text-black-50">
+                <a className="flex-fill btn border-0 lh-lg border-radius-0 disabled text-black-50">
                     <i className={icon}></i>
                 </a>
             )}

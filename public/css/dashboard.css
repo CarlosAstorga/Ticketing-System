@@ -92,9 +92,15 @@ body {
     object-fit: cover;
 }
 
+.above {
+    position: absolute;
+    z-index: 2;
+}
+
 .avatar-profile-container {
     height: 13rem;
     width: 100%;
+    position: relative;
 }
 
 .filter-shadow {
@@ -141,5 +147,19 @@ body {
     border-radius: 0 !important;
 }
 
+.overlay-profile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px) grayscale(50%);
+    width: 100%;
+    height: 100%;
+}
 
+.shadow-none {
+    box-shadow: none !important;
+}
 

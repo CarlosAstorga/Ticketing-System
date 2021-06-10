@@ -18,7 +18,7 @@ class FileController extends Controller
         ]);
 
         if (!$validator->fails()) {
-            $path = $request->file('file')->store('public/images/tickets/' . $ticket->id);
+            $path = $request->file('file')->store('/public/images/tickets/' . $ticket->id);
             $file = File::create([
                 'name'          => explode('/', $path)[4],
                 'uploader_id'   => $request->user()->id,
@@ -34,14 +34,14 @@ class FileController extends Controller
     {
         $file->delete();
         return response()->json(
-            Storage::delete('public/images/tickets/' . $file->ticket_id . '/' . $file->name),
+            Storage::delete('/public/images/tickets/' . $file->ticket_id . '/' . $file->name),
             200
         );
     }
 
     public function download(File $file)
     {
-        return Storage::download('public/images/tickets/' . $file->ticket_id . '/' . $file->name);
+        return Storage::download('/public/images/tickets/' . $file->ticket_id . '/' . $file->name);
     }
 
     public function updateAvatar(Request $request, User $user)
@@ -51,7 +51,10 @@ class FileController extends Controller
         ]);
 
         if (!$validator->fails()) {
-            $path = $request->file('file')->store('public/images/avatar/' . $user->id);
+            $avatarPath = "/public/images/avatar/$user->id";
+            if ($user->profile_picture) Storage::delete("$avatarPath/$user->profile_picture");
+
+            $path = $request->file('file')->store($avatarPath);
             $user->profile_picture = explode('/', $path)[4];
             if ($user->save()) return redirect('/user/profile');
         } else {

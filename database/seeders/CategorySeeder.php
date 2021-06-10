@@ -15,8 +15,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::create(['title' => 'Bugs / Errores']);
-        Category::create(['title' => 'Retroalimentación']);
-        Category::create(['title' => 'Nueva función']);
+        Category::create(['title' => 'Nueva característica']);
         Category::create(['title' => 'Otro']);
     }
 }

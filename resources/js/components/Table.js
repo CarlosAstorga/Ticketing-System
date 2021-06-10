@@ -45,20 +45,22 @@ export default function Table({data, columns, loading, buttons, url, fn, filter}
                                         );
                                     })}
                                     {buttons.length > 0 && (
-                                        <td className="p-0 d-flex border-0">
-                                            {buttons.map(button => {
-                                                return (
-                                                    <Button
-                                                        key={button.icon}
-                                                        row={row}
-                                                        id={row.id}
-                                                        fn={fn}
-                                                        tableUrl={url}
-                                                        filter={filter}
-                                                        button={button}
-                                                    />
-                                                );
-                                            })}
+                                        <td className="p-0 border-0 shadow-none bg-light">
+                                            <div className="d-flex w-100">
+                                                {buttons.map(button => {
+                                                    return (
+                                                        <Button
+                                                            key={button.icon}
+                                                            row={row}
+                                                            id={row.id}
+                                                            fn={fn}
+                                                            tableUrl={url}
+                                                            filter={filter}
+                                                            button={button}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
                                         </td>
                                     )}
                                 </tr>
